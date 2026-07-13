@@ -20,6 +20,7 @@
     overviewBtn: document.getElementById("overviewBtn"),
     overviewBtnLabel: document.getElementById("overviewBtnLabel"),
     searchInput: document.getElementById("searchInput"),
+    searchPill: document.getElementById("searchPill"),
     searchClear: document.getElementById("searchClear"),
     resultsPanel: document.getElementById("resultsPanel"),
     resultsCount: document.getElementById("resultsCount"),
@@ -472,11 +473,14 @@
     els.searchInput.addEventListener("focus", () => {
       if (els.searchInput.value.trim()) els.resultsPanel.classList.add("visible");
     });
-    els.searchClear.addEventListener("click", () => {
+    els.searchClear.addEventListener("click", (e) => {
+      e.stopPropagation();
       els.searchInput.value = "";
       runSearch("");
       els.searchInput.focus();
     });
+    // pill 어디를 눌러도 입력창 포커스 (팀 위치 보기 버튼과 동일한 클릭 감각)
+    els.searchPill.addEventListener("click", () => els.searchInput.focus());
     els.overviewBtn.addEventListener("click", () => fitToScreen(true));
   }
 
@@ -582,7 +586,8 @@
     els.appTitle.textContent = t.appTitle;
     els.langBtnLabel.textContent = t.code;
     els.overviewBtnLabel.textContent = t.overview;
-    els.searchInput.placeholder = t.searchPlaceholder;
+    // 검색창은 팀 위치 보기 pill과 동일하게 국문(placeholder=메인) + 영문(서브) 고정 표기
+    els.searchInput.placeholder = I18N.ko.startSearchBtn;
     // 시작 팝업 버튼은 국문(메인) + 영문(서브)을 항상 함께 표시하므로 메인은 국문 고정
     els.startTeamBtnLabel.textContent = I18N.ko.startTeamBtn;
     els.startSearchBtnLabel.textContent = I18N.ko.startSearchBtn;

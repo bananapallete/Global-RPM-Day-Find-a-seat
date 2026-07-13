@@ -206,25 +206,32 @@ body {
   gap: 10px;
 }
 
-/* ---------------- Overview button ---------------- */
+/* ---------------- 컨트롤 행 (전체보기 좌 · 언어선택 우, 동일 높이) ---------------- */
+.controls-row {
+  display: flex;
+  align-items: stretch;   /* 두 버튼 높이 자동 일치 */
+  gap: 10px;
+}
+
+/* ---------------- Overview button (좌측 정렬) ---------------- */
 .overview-btn {
   display: none;
   align-items: center;
   gap: 6px;
-  align-self: flex-start;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   color: #fff;
-  padding: 10px 14px;
+  padding: 5px 14px;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
   box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  cursor: pointer;
 }
 .overview-btn.visible { display: flex; }
-.overview-btn svg { width: 16px; height: 16px; }
+.overview-btn svg { width: 15px; height: 15px; }
 
-/* ---------------- 하단 팀 위치 보기 / 이름 검색 (2열 1행) ---------------- */
+/* ---------------- 하단 팀 위치 보기 / 이름 검색 (2열 1행, 동일 디자인) ---------------- */
 .bottom-row {
   display: flex;
   gap: 10px;
@@ -234,12 +241,16 @@ body {
   flex: 1 1 0;
   min-width: 0;
 }
+/* 높이를 이전 대비 약 30% 낮춤: 세로 패딩과 줄간격 축소 */
 .bottom-row .pill-btn {
   width: auto;
-  border-radius: 22px;
+  border-radius: 16px;
+  padding: 4px 14px;
   justify-content: center;
 }
-.bottom-row .search-bar { margin: 0; }
+.bottom-row .pill-btn__text { line-height: 1.1; }
+.bottom-row .pill-btn__main { font-size: 13.5px; }
+.bottom-row .search-pill__input { font-size: 13.5px; }
 
 /* ---------------- 공용 pill 버튼 (팀 위치 보기 등) ---------------- */
 .pill-btn {
@@ -265,11 +276,11 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  align-self: center;
+  margin-left: auto;   /* 컨트롤 행에서 우측 정렬 (전체보기 유무와 무관) */
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 999px;
-  padding: 3px 5px 3px 11px;
+  padding: 2px 5px 2px 11px;
   box-shadow: 0 8px 22px rgba(0,0,0,0.45);
 }
 .lang-toggle__icon {
@@ -297,48 +308,36 @@ body {
   font-weight: 700;
 }
 
-/* ---------------- Search bar (floating bottom) ---------------- */
-.search-bar {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 22px;
-  padding: 10px 16px 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-.search-bar__label {
-  display: flex;
-  flex-direction: column;
-  padding: 2px 2px 8px;
-}
-.search-bar__row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.search-bar__icon { width: 18px; height: 18px; color: var(--text-dim); flex: 0 0 auto; }
-.search-bar__input {
-  flex: 1;
+/* ---------------- 이름 검색 (팀 위치 보기와 동일한 pill 디자인) ---------------- */
+/* .search-pill 은 .pill-btn 스타일을 그대로 상속받고, 메인 라벨 자리에 입력창을 둔다. */
+.search-pill { position: relative; }
+.search-pill .pill-btn__text { flex: 1 1 0; min-width: 0; }
+.search-pill__input {
+  width: 100%;
   background: transparent;
   border: none;
   outline: none;
   color: #fff;
-  font-size: 15px;
+  font-size: 14.5px;
+  font-weight: 700;
+  padding: 0;
   min-width: 0;
 }
-.search-bar__input::placeholder { color: var(--text-dim); }
-.search-bar__clear {
+.search-pill__input::placeholder { color: #fff; font-weight: 700; opacity: 1; }
+.search-pill__clear {
   display: none;
+  flex: 0 0 auto;
   background: rgba(255,255,255,0.08);
   border: none;
   color: var(--text-dim);
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1;
   cursor: pointer;
 }
-.search-bar__clear.visible { display: block; }
+.search-pill__clear.visible { display: block; }
 
 /* ---------------- Results panel ---------------- */
 .results-panel {
