@@ -447,9 +447,11 @@ body {
   font-weight: 700;
 }
 .start-modal__btn-sub {
-  font-size: 11.5px;
-  font-weight: 500;
+  font-size: 10px;
+  font-weight: 400;
   color: var(--text-dim);
+  opacity: 0.65;
+  letter-spacing: 0.02em;
 }
 .start-modal__btn:active { transform: scale(0.98); }
 
