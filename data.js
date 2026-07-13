@@ -223,8 +223,8 @@ const TEAMS_RAW = [
   { ko: "기계사업팀", en: "Mechanical BIZ Team", members: ["윤영환","김종성","신상준","한수민","이환규","박이준","심은기","최승빈","박상우"] },
   { ko: "지반사업팀", en: "Geotechnical BIZ Team", members: ["강소라","전제석","조원준","최용준","이종훈","조재은","배일근","채형진","유현일"] },
   { ko: "구조사업팀", en: "Structural BIZ Team", members: ["정대교","이정우","전준언","김효진","강희용","이선벽","배동민","박준혁","임정현","김민재","박예림"] },
-  { ko: "건축사업팀", en: "Architecture BIZ Team", members: ["신의균","강재석","이준희","정민교","이환주","김용준","최민주","김승준","김승래"] },
-  { ko: "설계개발팀", en: "Design DEV Team", members: ["이은경","안재오","김승준","이시암","최배성","김현덕","안태준","이승훈","홍정모","김종남","배상현","김준호","박찬석","문성혁","류지승","소정은","장재욱"] },
+  { ko: "건축사업팀", en: "Architecture BIZ Team", members: ["신의균","강재석","이준희","정민교","이환주","김용준","최민주","H14","김승래"] },
+  { ko: "설계개발팀", en: "Design DEV Team", members: ["이은경","안재오","K10","이시암","최배성","김현덕","안태준","이승훈","홍정모","김종남","배상현","김준호","박찬석","문성혁","류지승","소정은","장재욱"] },
   { ko: "엔솔개발팀", en: "EnSol DEV Team", members: ["박현재","정진상","허문석","우성운","함성훈","서기홍","윤장호","권정우","장형상","정향희","박경식","강승한","박건태","장창현","상예찬","이수민","서충원"] },
   { ko: "기술기획팀", en: "Technical Planning Team", members: ["이혜연","이대근","김동진","김선우","김태국","박상렬","하성열","이승진","이현민","박재욱","최은주"] },
   { ko: "MAX TF", en: "MAX TF", members: ["신대석","심후성","박시형","장훈","박영준","허영욱","김현","김민섭","김정빈","변창언","윤재웅","박찬우","고종혁","김준우","이준서"] },
@@ -237,13 +237,13 @@ const TEAMS_RAW = [
   { ko: "ExD팀", en: "ExD Team", members: ["김성진","양소희"] },
   { ko: "행복인재팀", en: "People & Culture Team", members: ["김소록","김호영","정승종","이진오","임정민","마영준"] },
   { ko: "경영전략실", en: "Management Strategy Office", members: ["신미영","고희중","김대윤","이승현","박민호","허정우"] },
-  { ko: "SK추진실", en: "SK Office", members: ["이상호","서남일","권태형","박지훈"] },
+  { ko: "SK추진실", en: "SK Office", members: ["이상호","서남일","권태형","G9"] },
   { ko: "SK상전실", en: "SK Operations Office", members: ["김병석","장대성","이현주"] },
   { ko: "중국법인", en: "China Branch", members: ["위신","팽해군","진군렴","왕천","리빈","조몽기","마문학","김해룡","당효동","황우능","리나","왕평평","당하","황애령","김민호","왕우명","리남성","라강림","곽홍량","양로","성종수","김경환(중)","오림호","리춘맹","왕안기","강위","장검명","고덕지","육수동","정팅","황립홍","정승식"] },
   { ko: "유럽법인", en: "Europe Branch", members: ["Sunny","진","마노즈","부샤","로히트","보우차","이진솔","권성현"] },
   { ko: "필리핀법인", en: "Philippines Branch", members: ["전상목","최주현","제인","아메드","파울로","리츠","마리츠","막스","다이앤","놀란","라지"] },
   { ko: "호주법인", en: "Australia Branch", members: ["김창범","하르샤","최종규","프라납","최춘화"] },
-  { ko: "북미법인", en: "North America Branch", members: ["이준호","박지훈","한정묘"] },
+  { ko: "북미법인", en: "North America Branch", members: ["이준호","F5","한정묘"] },
   { ko: "남미법인", en: "South America Branch", members: ["이근협","알란","호라시오","소피아","안드레스","대니엘","루세로"] },
   { ko: "일본법인", en: "Japan Branch", members: ["신정호","윤성민","김재모","송재경","최동철","전장웅","김경환(일)","히로세","신승윤","임채호","김은영","신동우","이한규","오세훈","후지이","이지우"] },
   { ko: "러시아법인", en: "Russia Branch", members: ["강올레그","콘스탄틴","예고르","크리스티나","블라디미르","예카테리나","예브게니","안나","막심","옥사나"] },
@@ -253,15 +253,25 @@ const TEAMS_RAW = [
 /* 좌석명 -> {row,col,id} 역인덱스 (실제 시트에 존재하는 사람만 팀 뷰에 노출) */
 function buildTeams() {
   const seatByName = {};
+  const seatById = {};
   SEATS.forEach((s) => {
+    seatById[s.id] = s;
     if (!s.name) return;
     (seatByName[s.name] = seatByName[s.name] || []).push(s.id);
   });
 
+  // 동명이인을 특정 좌석으로 지정할 때는 이름 대신 좌석 id(예: "F5")를 members에
+  // 넣는다. 좌석 id 패턴(행 A-O + 열 숫자)이면 그 좌석만, 아니면 이름으로 매칭.
+  const isSeatId = (m) => /^[A-O]\d{1,2}$/.test(m) && seatById[m];
+
   return TEAMS_RAW.map((t, idx) => {
     const seatIds = [];
-    t.members.forEach((name) => {
-      const ids = seatByName[name];
+    t.members.forEach((member) => {
+      if (isSeatId(member)) {
+        seatIds.push(member);
+        return;
+      }
+      const ids = seatByName[member];
       if (ids) ids.forEach((id) => seatIds.push(id));
     });
     return {
