@@ -403,6 +403,20 @@
     return `${seat.row}-${String(seat.col).padStart(2, "0")}`;
   }
 
+  // 좌석 id -> 소속 팀 목록 (팀 데이터가 이름 기준이라 한 좌석이 여러 팀에
+  // 잡힐 수 있어 배열로 둔다). 동명이인 구분용으로 검색 결과에 표시한다.
+  const seatTeams = {};
+  TEAMS.forEach((team) => {
+    team.seatIds.forEach((id) => {
+      (seatTeams[id] = seatTeams[id] || []).push(team);
+    });
+  });
+  function seatTeamLabel(seatId) {
+    const teams = seatTeams[seatId];
+    if (!teams || !teams.length) return "";
+    return teams.map((t) => (currentLang === "ko" ? t.ko : t.en)).join(" / ");
+  }
+
   function runSearch(query) {
     const q = query.trim();
     els.searchClear.classList.toggle("visible", q.length > 0);
@@ -430,11 +444,20 @@
 
     els.resultsCount.textContent = I18N[currentLang].resultsCount(matches.length);
     els.resultsList.innerHTML = "";
+    // 결과 안에서 같은 이름이 2명 이상이면(동명이인) 소속 팀을 함께 표시해 구분
+    const nameCount = {};
+    matches.forEach((s) => {
+      const n = seatDisplayName(s, currentLang);
+      nameCount[n] = (nameCount[n] || 0) + 1;
+    });
     matches.slice(0, 50).forEach((seat) => {
       const li = document.createElement("li");
+      const dispName = seatDisplayName(seat, currentLang);
+      const team = nameCount[dispName] > 1 ? seatTeamLabel(seat.id) : "";
       li.innerHTML =
         `<span class="results-panel__code">${formatSeatCode(seat)}</span>` +
-        `<span class="results-panel__name">${seatDisplayName(seat, currentLang)}</span>`;
+        `<span class="results-panel__name">${dispName}</span>` +
+        (team ? `<span class="results-panel__team">${team}</span>` : "");
       li.addEventListener("click", () => {
         focusSeat(seat.id);
         els.resultsPanel.classList.remove("visible");
