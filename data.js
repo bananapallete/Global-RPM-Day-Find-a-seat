@@ -8,7 +8,7 @@ const SEATS_RAW = {
   B: ["당효동","황우능","리나","왕평평","당하","장재욱","황애령","김민호","신동우","윤성민","최춘화","최종규","마리츠","다이앤","막스","놀란","라지","안나","옥사나","콘스탄틴","블라디미르"],
   C: ["왕우명","리남성","라강림","곽홍량","양로","성종수","김경환(중)","오림호","신정호","신승윤","임채호","김창범","프라납","하르샤","프라하르샤","시타람","라비","아시시","난딥","아얀","리샤브"],
   D: ["리춘맹","왕안기","강위","장검명","고덕지","육수동","이한규","김재모","송재경","김은영","이지우","오세훈","전장웅","히로세","후지이","시티암","마헤시","니사르그","카부스","디비얀쉬","바탄"],
-  E: ["정팅","황립홍","안드레스","대니엘","루세로","소피아","이경찬","최유민","강기훈","홍수정","신상현","강현규","니킬","에드가","보우차","마노즈","싯다르타","자예쉬","팟파신(아)","끼앗싸꾼(아)","투 탕(아)"],
+  E: ["정팅","황립홍","안드레스","대니엘","루세로","소피아","이경찬","최유민","강기훈","홍수정","신상현","강현규","니킬","에드가","보우차","마노즈","싯다르타","자예쉬","팟파신","끼앗싸꾼","투 탕"],
   F: ["알란","호라시오","한정묘","이준호","박지훈","이근협","이상호","정승식","정선태","CHO","신미영","최원호","김재승","신대석","이현수","권성현","이진솔","홍기성","손준걸","최영호","이범근"],
   G: ["양현승","최진원","김관홍","이정현","윤장호","이현웅","권태형","서남일","박지훈","라소담","이상윤","김소록","김희진","양상현","진병엽","양재석","윤영웅","임승규","최규완","안계명","안휘빈"],
   H: ["유현일","이태헌","배일근","채형진","조재은","최용준","김병석","장대성","이현주","정승종","마영준","김호영","최민주","김승준","김승래","신의균","박성수","정민영","박성호","정지영","한현택"],
@@ -50,27 +50,34 @@ const SEATS_RAW_EN = {
 const SCALE_FACTOR = 2.5;
 const F = SCALE_FACTOR;
 
+/* 좌석 박스를 정사각형 대신 "가로로 긴 직사각형"으로 만들기 위한 가로 확대 배율.
+   가로 방향의 모든 좌표/치수(좌석 폭, 열 간격, 무대/기둥 위치, 캔버스 폭)를 동일하게
+   XSTRETCH배 늘리면, 세로(높이/행 간격)는 그대로라 배치 충돌 없이 박스만 옆으로 길어진다. */
+const XSTRETCH = 1.4;
+
 /* ---- 레이아웃 상수 (Figma 디자인 node 34:2 좌표 기준 비율 유지, px 단위 * F) ---- */
 const LAYOUT = {
-  seat: 32 * F,
-  gapSeat: 2 * F,
-  gapGroup: 10 * F,
-  gapAisle: 40 * F,
-  xStart: 74 * F,
-  stage: { x: 74 * F, y: 46 * F, w: 758 * F, h: 40 * F },
+  seatW: 32 * F * XSTRETCH,   // 가로 확대된 좌석 폭 (직사각형)
+  seatH: 32 * F,              // 좌석 높이 (원본 유지)
+  gapSeatX: 2 * F * XSTRETCH, // 같은 그룹 내 열 간격(가로)
+  gapSeatY: 2 * F,            // 행 간격(세로)
+  gapGroup: 10 * F * XSTRETCH,
+  gapAisle: 40 * F * XSTRETCH,
+  xStart: 74 * F * XSTRETCH,
+  stage: { x: 74 * F * XSTRETCH, y: 46 * F, w: 758 * F * XSTRETCH, h: 40 * F },
   colHeaderY: 99 * F,
-  rowLabelW: 28 * F,
+  rowLabelW: 28 * F * XSTRETCH,
   block1: { rows: ["A","B","C","D","E","F","G","H","I"], yStart: 136 * F, colGroups: [6, 6, 9] },
   block2: { rows: ["J","K","L","M","N","O"], yStart: 480 * F, colGroups: [6, 9, 6] },
-  markerX: 862 * F,
-  markerW: 50 * F,
+  markerX: 862 * F * XSTRETCH,
+  markerW: 50 * F * XSTRETCH,
   markers: [
     { type: "pillar", y: 170 * F, h: 32 * F },
     { type: "door",   y: 238 * F, h: 100 * F },
     { type: "pillar", y: 340 * F, h: 32 * F },
     { type: "door",   y: 514 * F, h: 134 * F }
   ],
-  canvasW: 940 * F,
+  canvasW: 940 * F * XSTRETCH,
   canvasH: 700 * F,
   radius: 4 * F,
   fontSize: {
@@ -83,10 +90,9 @@ const LAYOUT = {
     // 한계가 있어 폰트도 함께 줄여 2줄 이상 줄바꿈을 최대한 줄인다.
     seatEn: 6 * F
   },
-  /* 영문 모드에서 이름 줄바꿈을 줄이기 위해 좌석 박스를 가로로 살짝 늘림.
-     같은 그룹 내 열 간격(gapSeat = 2*F)이 좁아, 늘어난 폭만큼 좌우로
-     반씩 확장되면 양옆 좌석과의 간격이 "extra"만큼 줄어든다. 겹치지
-     않도록 extra < gapSeat(=2*F) 로 제한(약간의 여유 간격 유지). */
+  /* 영문 모드에서 이름 줄바꿈을 더 줄이기 위해 좌석 박스를 가로로 추가로 살짝 늘림.
+     늘어난 폭만큼 좌우로 반씩 확장되면 양옆 좌석과의 간격이 "extra"만큼 줄어든다.
+     겹치지 않도록 extra < gapSeatX 로 제한(약간의 여유 간격 유지). */
   seatWidenExtraEn: 1.8 * F
 };
 
@@ -97,10 +103,10 @@ function buildColXs(groupSizes, gaps) {
   for (let g = 0; g < groupSizes.length; g++) {
     for (let c = 0; c < groupSizes[g]; c++) {
       xs.push(x);
-      x += LAYOUT.seat + LAYOUT.gapSeat;
+      x += LAYOUT.seatW + LAYOUT.gapSeatX;
     }
     if (g < groupSizes.length - 1) {
-      x = x - LAYOUT.gapSeat + gaps[g];
+      x = x - LAYOUT.gapSeatX + gaps[g];
     }
   }
   return xs;
@@ -114,7 +120,7 @@ function buildSeats() {
   [LAYOUT.block1, LAYOUT.block2].forEach((block) => {
     const colXs = buildColXs(block.colGroups, gaps);
     block.rows.forEach((rowLetter, rowIdx) => {
-      const y = block.yStart + rowIdx * (LAYOUT.seat + LAYOUT.gapSeat);
+      const y = block.yStart + rowIdx * (LAYOUT.seatH + LAYOUT.gapSeatY);
       const names = SEATS_RAW[rowLetter];
       const namesEn = SEATS_RAW_EN[rowLetter] || [];
       colXs.forEach((x, colIdx) => {
@@ -146,7 +152,7 @@ function buildRowLabels() {
   const labels = [];
   [LAYOUT.block1, LAYOUT.block2].forEach((block) => {
     block.rows.forEach((rowLetter, rowIdx) => {
-      const y = block.yStart + rowIdx * (LAYOUT.seat + LAYOUT.gapSeat) + LAYOUT.seat / 2;
+      const y = block.yStart + rowIdx * (LAYOUT.seatH + LAYOUT.gapSeatY) + LAYOUT.seatH / 2;
       labels.push({ row: rowLetter, y });
     });
   });
@@ -203,29 +209,39 @@ const I18N = {
 const LANG_ORDER = ["ko", "en"];
 
 /* ---- 팀(소속) 데이터 ----
-   출처: 조직도.zip (2026-07-13 스크린샷 23장). 각 팀의 국문 인원명은 원본 슬라이드 그대로이며,
-   "(인턴)","(호주)","(미주)","(인도)" 등 슬라이드상의 부가 설명은 좌석명 매칭을 위해 제외했다.
-   영문 팀명은 사용자가 제공한 국문/영문 팀명 시트를 기준으로 매핑했고, 시트에 없는 2개 팀
-   (온사이트개발팀, 남미법인)은 합리적으로 영문명을 새로 붙였다. */
+   국내 실/팀/TF 23개는 사용자 제공 구글시트("이름/소속팀 정리", 2026-07-13)를 기준으로
+   재구성했다. 시트는 국내 인원의 최신 소속을 담고 있어 국내팀에 대해서는 시트를 우선한다.
+   시트에 없는 해외법인 8개(유럽/필리핀/호주/북미/남미/일본/러시아/인도)는 기존 데이터를 유지한다.
+   시트에 없지만 좌석이 있고 기존 팀에 배정돼 있던 인원(ENR TF 강기훈·에드가·니킬, 유럽사업팀
+   이현수, 아시아사업팀 이범근)은 팀을 잃지 않도록 그대로 유지했다.
+   신규 팀 영문명(RPM추진실 등 8개)은 시트에 영문이 없어 합리적으로 새로 붙였다(추후 확정 필요). */
 const TEAMS_RAW = [
+  { ko: "ENR TF", en: "ENR TF", members: ["강현규","신상현","이경찬","최유민","홍수정","강기훈","에드가","니킬"] },
+  { ko: "유럽사업팀", en: "Europe BIZ Team", members: ["양재석","진병엽","양상현","김희진","이현수"] },
+  { ko: "아시아사업팀", en: "Asia BIZ Team", members: ["홍기성","손준걸","최영호","윤영웅","임승규","최규완","안계명","박철우","박성수","안휘빈","한현택","박성호","정지영","정민영","정승완","오동현","김규보","박하림","이범근"] },
   { ko: "남부사업TF", en: "Southern BIZ TF", members: ["이승민","정용근","유명인","김세훈"] },
-  { ko: "기계사업팀", en: "Mechanical BIZ Team", members: ["윤영환","김종성","신상준","한수민","이환규","박이준","심은기","최승빈"] },
-  { ko: "구조사업팀", en: "Structural BIZ Team", members: ["정대교","이정우","전준언","김효진","강희용","이선벽","조원규","배동민","박준혁","임정현","김민재"] },
-  { ko: "건축사업팀", en: "Architecture BIZ Team", members: ["신의균","강재석","이준희","정민교","이환주","김용준","최민주","김승래","김승준"] },
-  { ko: "지반사업팀", en: "Geotechnical BIZ Team", members: ["강소라","김기봉","전제석","조원준","최용준","이종훈","조재은","배일근","채형진"] },
-  { ko: "ENR TF", en: "ENR TF", members: ["강현규","신상현","이경찬","최유민","서승우","홍수정","강기훈","에드가","니킬"] },
-  { ko: "유럽사업팀", en: "Europe BIZ Team", members: ["이현수","양재석","진병엽","양상현","김희진"] },
-  { ko: "유럽법인", en: "Europe Branch", members: ["Sunny","진","마노즈","부샤","로히트"] },
-  { ko: "아시아사업팀", en: "Asia BIZ Team", members: ["홍기성","손준걸","최영호","윤영웅","임승규","최규완","안계명","이범근","박철우","한현택","박성호","박성수","안휘빈","정지영","정민영","정승완","오동현","박하림","김규보"] },
-  { ko: "필리핀법인", en: "Philippines Branch", members: ["전상목","최주현","제인","아메드","파울로","리츠","마리츠","막스","다이앤","놀란","라지"] },
-  { ko: "호주법인", en: "Australia Branch", members: ["김창범","하르샤","최종규","프라납","최춘화"] },
-  { ko: "설계개발팀", en: "Design DEV Team", members: ["박홍진","이은경","안재오","김승준","이시암","최배성","김현덕","안태준","이승훈","홍정모","김종남","배상현","김준호","박찬석","문성혁","류지승"] },
-  { ko: "엔솔개발팀", en: "EnSol DEV Team", members: ["박현재","정진상","허문석","우성운","함성훈","서기홍","윤장호","권정우","장형상","정향희","박경식","강승한","박건태","장창현","상예찬","이수민"] },
+  { ko: "기계사업팀", en: "Mechanical BIZ Team", members: ["윤영환","김종성","신상준","한수민","이환규","박이준","심은기","최승빈","박상우"] },
+  { ko: "지반사업팀", en: "Geotechnical BIZ Team", members: ["강소라","전제석","조원준","최용준","이종훈","조재은","배일근","채형진","유현일"] },
+  { ko: "구조사업팀", en: "Structural BIZ Team", members: ["정대교","이정우","전준언","김효진","강희용","이선벽","배동민","박준혁","임정현","김민재","박예림"] },
+  { ko: "건축사업팀", en: "Architecture BIZ Team", members: ["신의균","강재석","이준희","정민교","이환주","김용준","최민주","김승준","김승래"] },
+  { ko: "설계개발팀", en: "Design DEV Team", members: ["이은경","안재오","김승준","이시암","최배성","김현덕","안태준","이승훈","홍정모","김종남","배상현","김준호","박찬석","문성혁","류지승","소정은","장재욱"] },
+  { ko: "엔솔개발팀", en: "EnSol DEV Team", members: ["박현재","정진상","허문석","우성운","함성훈","서기홍","윤장호","권정우","장형상","정향희","박경식","강승한","박건태","장창현","상예찬","이수민","서충원"] },
   { ko: "기술기획팀", en: "Technical Planning Team", members: ["이혜연","이대근","김동진","김선우","김태국","박상렬","하성열","이승진","이현민","박재욱","최은주"] },
   { ko: "MAX TF", en: "MAX TF", members: ["신대석","심후성","박시형","장훈","박영준","허영욱","김현","김민섭","김정빈","변창언","윤재웅","박찬우","고종혁","김준우","이준서"] },
-  { ko: "모티브개발팀", en: "MOTIIV DEV Team", members: ["김용수","도기봉","손영민","서상준","조해용","김지원","김상리","유상진","최승원","신형진"] },
-  { ko: "웹서비스개발팀", en: "Web Services DEV Team", members: ["이승현","이의현","조도연","신민우","김현규","황정혜","이찬","김건휘","한강섭"] },
-  { ko: "온사이트개발팀", en: "On-site DEV Team", members: ["하성우","이태헌","박동근","양현승","최진원","김관홍","이정현","황병훈","윤장호"] },
+  { ko: "모티브개발팀", en: "MOTIIV DEV Team", members: ["김용수","도기봉","손영민","조해용","서상준","김지원","김상리","유상진","최승원","신형진"] },
+  { ko: "웹서비스개발팀", en: "Web Services DEV Team", members: ["이의현","조도연","신민우","김현규","황정혜","이찬","김건휘","한강섭","김승수"] },
+  { ko: "온사이트개발팀", en: "On-site DEV Team", members: ["하성우","이태헌","박동근","양현승","최진원","김관홍","이정현","황병훈","윤장호","이현웅"] },
+  { ko: "RPM추진실", en: "RPM Office", members: ["김재승","김기봉","김제헌","김동현","윤승훈","정미선","조성진","김민태","한내경","김희성","조한정","이지선","손가희","민의진","신정윤","송아리","유온유","황다원","김동규","김동욱"] },
+  { ko: "신사옥추진실", en: "New HQ Office", members: ["정선태"] },
+  { ko: "자인기획실", en: "Zine Planning Office", members: ["최원호","이상윤","라소담"] },
+  { ko: "ExD팀", en: "ExD Team", members: ["김성진","양소희"] },
+  { ko: "행복인재팀", en: "People & Culture Team", members: ["김소록","김호영","정승종","이진오","임정민","마영준"] },
+  { ko: "경영전략실", en: "Management Strategy Office", members: ["신미영","고희중","김대윤","이승현","박민호","허정우"] },
+  { ko: "SK추진실", en: "SK Office", members: ["이상호","서남일","권태형","박지훈"] },
+  { ko: "SK상전실", en: "SK Operations Office", members: ["김병석","장대성","이현주"] },
+  { ko: "유럽법인", en: "Europe Branch", members: ["Sunny","진","마노즈","부샤","로히트"] },
+  { ko: "필리핀법인", en: "Philippines Branch", members: ["전상목","최주현","제인","아메드","파울로","리츠","마리츠","막스","다이앤","놀란","라지"] },
+  { ko: "호주법인", en: "Australia Branch", members: ["김창범","하르샤","최종규","프라납","최춘화"] },
   { ko: "북미법인", en: "North America Branch", members: ["이준호","박지훈","한정묘"] },
   { ko: "남미법인", en: "South America Branch", members: ["이근협","알란","호라시오","소피아","안드레스","대니엘"] },
   { ko: "일본법인", en: "Japan Branch", members: ["신정호","윤성민","김재모","송재경","최동철","전장웅","김경환(일)","히로세","신승윤","임채호","김은영","신동우","이한규","오세훈","후지이","이지우"] },

@@ -69,10 +69,10 @@
         const label = document.createElement("div");
         label.className = "col-label";
         Object.assign(label.style, {
-          left: (c.x + LAYOUT.seat / 2) + "px",
+          left: (c.x + LAYOUT.seatW / 2) + "px",
           top: header.y + "px",
           width: LAYOUT.rowLabelW + "px",
-          height: LAYOUT.seat + "px",
+          height: LAYOUT.seatH + "px",
           fontSize: LAYOUT.fontSize.label + "px"
         });
         label.textContent = c.label;
@@ -85,10 +85,10 @@
       const label = document.createElement("div");
       label.className = "row-label";
       Object.assign(label.style, {
-        left: (24 * SCALE_FACTOR) + "px",
+        left: (24 * SCALE_FACTOR * XSTRETCH) + "px",
         top: rl.y + "px",
         width: LAYOUT.rowLabelW + "px",
-        height: LAYOUT.seat + "px",
+        height: LAYOUT.seatH + "px",
         fontSize: LAYOUT.fontSize.label + "px"
       });
       label.textContent = rl.row;
@@ -122,7 +122,7 @@
         left: box.left + "px",
         top: seat.y + "px",
         width: box.width + "px",
-        height: LAYOUT.seat + "px",
+        height: LAYOUT.seatH + "px",
         borderRadius: LAYOUT.radius + "px",
         fontSize: box.fontSize + "px",
         padding: (2 * SCALE_FACTOR) + "px"
@@ -142,7 +142,7 @@
     const extra = isEn ? LAYOUT.seatWidenExtraEn : 0;
     return {
       left: seat.x - extra / 2,
-      width: LAYOUT.seat + extra,
+      width: LAYOUT.seatW + extra,
       fontSize: isEn ? LAYOUT.fontSize.seatEn : LAYOUT.fontSize.seat
     };
   }
@@ -274,8 +274,8 @@
     if (!seat) return;
     const vp = getViewportSize();
     const targetScale = clamp(1.15, view.minScale, view.maxScale);
-    const cx = seat.x + LAYOUT.seat / 2;
-    const cy = seat.y + LAYOUT.seat / 2;
+    const cx = seat.x + LAYOUT.seatW / 2;
+    const cy = seat.y + LAYOUT.seatH / 2;
     const targetTx = vp.w / 2 - cx * targetScale;
     const targetTy = vp.h / 2 - cy * targetScale;
     animateTo(targetScale, targetTx, targetTy, 650);
@@ -291,9 +291,9 @@
     if (!seats.length) return;
 
     const minX = Math.min(...seats.map((s) => s.x));
-    const maxX = Math.max(...seats.map((s) => s.x + LAYOUT.seat));
+    const maxX = Math.max(...seats.map((s) => s.x + LAYOUT.seatW));
     const minY = Math.min(...seats.map((s) => s.y));
-    const maxY = Math.max(...seats.map((s) => s.y + LAYOUT.seat));
+    const maxY = Math.max(...seats.map((s) => s.y + LAYOUT.seatH));
     const pad = 60;
     const boxW = (maxX - minX) + pad * 2;
     const boxH = (maxY - minY) + pad * 2;
