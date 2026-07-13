@@ -44,16 +44,13 @@
       <ul class="results-panel__list" id="resultsList"></ul>
     </section>
 
-    <!-- 언어 선택 (하단 고정 바) -->
-    <div class="bottom-lang" id="bottomLang">
-      <button class="bottom-lang__btn" id="bottomLangBtn" aria-haspopup="listbox" aria-expanded="false">
-        <svg class="bottom-lang__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>
-          <path d="M3 12h18M12 3c2.5 2.5 3.8 5.7 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.7-3.8-9S9.5 5.5 12 3z" stroke="currentColor" stroke-width="1.6"/>
-        </svg>
-        <span id="bottomLangBtnLabel">한국어</span>
-      </button>
-      <ul class="bottom-lang__menu" id="bottomLangMenu" role="listbox"></ul>
+    <!-- 언어 선택 (하단 고정, 버튼형 토글) -->
+    <div class="lang-toggle" id="langToggle" role="group" aria-label="language">
+      <svg class="lang-toggle__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M3 12h18M12 3c2.5 2.5 3.8 5.7 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.7-3.8-9S9.5 5.5 12 3z" stroke="currentColor" stroke-width="1.6"/>
+      </svg>
+      <!-- 버튼은 LANG_ORDER 기준으로 JS가 생성 -->
     </div>
 
     <!-- 팀 위치 보기 버튼 -->

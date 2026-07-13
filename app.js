@@ -34,10 +34,7 @@
     teamModalBackLabel: document.getElementById("teamModalBackLabel"),
     teamModalTitle: document.getElementById("teamModalTitle"),
     teamModalGrid: document.getElementById("teamModalGrid"),
-    bottomLang: document.getElementById("bottomLang"),
-    bottomLangBtn: document.getElementById("bottomLangBtn"),
-    bottomLangBtnLabel: document.getElementById("bottomLangBtnLabel"),
-    bottomLangMenu: document.getElementById("bottomLangMenu"),
+    langToggle: document.getElementById("langToggle"),
     teamViewBtn: document.getElementById("teamViewBtn")
   };
 
@@ -536,9 +533,23 @@
       els.langSelect.classList.remove("open");
       els.langBtn.setAttribute("aria-expanded", "false");
     });
-    buildLangMenuInto(els.bottomLangMenu, () => {
-      els.bottomLang.classList.remove("open");
-      els.bottomLangBtn.setAttribute("aria-expanded", "false");
+  }
+
+  /* 하단 버튼형 언어 토글: LANG_ORDER 순서대로 버튼 생성, 현재 언어 활성 표시 */
+  function buildLangToggle() {
+    els.langToggle.querySelectorAll(".lang-toggle__btn").forEach((b) => b.remove());
+    LANG_ORDER.forEach((code) => {
+      const btn = document.createElement("button");
+      btn.className = "lang-toggle__btn";
+      btn.dataset.lang = code;
+      btn.textContent = I18N[code].name;
+      if (code === currentLang) btn.classList.add("active");
+      btn.addEventListener("click", () => {
+        if (currentLang === code) return;
+        currentLang = code;
+        applyI18n();
+      });
+      els.langToggle.appendChild(btn);
     });
   }
 
@@ -547,7 +558,6 @@
     document.documentElement.lang = currentLang;
     els.appTitle.textContent = t.appTitle;
     els.langBtnLabel.textContent = t.code;
-    els.bottomLangBtnLabel.textContent = t.name;
     els.overviewBtnLabel.textContent = t.overview;
     els.searchInput.placeholder = t.searchPlaceholder;
     els.startTeamBtnLabel.textContent = t.startTeamBtn;
@@ -557,6 +567,7 @@
     refreshMarkerLabels();
     refreshSeatNames();
     buildLangMenu();
+    buildLangToggle();
     // 검색 중이었다면 라벨(결과없음/건수) 갱신
     if (els.searchInput.value.trim()) runSearch(els.searchInput.value);
     // 팀 모달이 열려있으면 정렬/라벨 다시 반영
@@ -569,23 +580,11 @@
       const willOpen = !els.langSelect.classList.contains("open");
       els.langSelect.classList.toggle("open", willOpen);
       els.langBtn.setAttribute("aria-expanded", String(willOpen));
-      els.bottomLang.classList.remove("open");
-    });
-    els.bottomLangBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const willOpen = !els.bottomLang.classList.contains("open");
-      els.bottomLang.classList.toggle("open", willOpen);
-      els.bottomLangBtn.setAttribute("aria-expanded", String(willOpen));
-      els.langSelect.classList.remove("open");
     });
     document.addEventListener("click", (e) => {
       if (!els.langSelect.contains(e.target)) {
         els.langSelect.classList.remove("open");
         els.langBtn.setAttribute("aria-expanded", "false");
-      }
-      if (!els.bottomLang.contains(e.target)) {
-        els.bottomLang.classList.remove("open");
-        els.bottomLangBtn.setAttribute("aria-expanded", "false");
       }
     });
   }

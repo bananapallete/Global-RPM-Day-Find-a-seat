@@ -243,9 +243,8 @@ body {
 .pill-btn__main { font-size: 14.5px; font-weight: 700; }
 .pill-btn__sub { font-size: 10.5px; font-weight: 500; color: var(--text-dim); }
 
-/* ---------------- 하단 언어 선택 바 ---------------- */
-.bottom-lang { position: relative; }
-.bottom-lang__btn {
+/* ---------------- 하단 언어 선택 (버튼형 토글) ---------------- */
+.lang-toggle {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -253,48 +252,34 @@ body {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 999px;
-  padding: 10px 18px;
+  padding: 6px 8px 6px 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.lang-toggle__icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
   color: var(--label-blue);
-  font-size: 13.5px;
-  font-weight: 700;
-  cursor: pointer;
 }
-.bottom-lang__icon { width: 18px; height: 18px; flex: 0 0 auto; }
-.bottom-lang__menu {
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 0;
-  right: 0;
-  list-style: none;
-  margin: 0;
-  padding: 6px;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 14px;
-  box-shadow: 0 12px 32px rgba(0,0,0,0.45);
-  opacity: 0;
-  transform: translateY(6px) scale(0.98);
-  pointer-events: none;
-  transition: opacity .15s ease, transform .15s ease;
-}
-.bottom-lang.open .bottom-lang__menu {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  pointer-events: auto;
-}
-.bottom-lang__menu li {
-  padding: 11px 12px;
-  border-radius: 10px;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
+.lang-toggle__btn {
+  flex: 1 1 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 8px 12px;
   color: var(--text-dim);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease;
 }
-.bottom-lang__menu li:hover { background: rgba(84,148,251,0.12); color: #fff; }
-.bottom-lang__menu li.active { color: var(--label-blue); font-weight: 700; }
+.lang-toggle__btn:hover { color: #fff; }
+.lang-toggle__btn.active {
+  background: rgba(84,148,251,0.18);
+  border-color: rgba(84,148,251,0.45);
+  color: var(--label-blue);
+  font-weight: 700;
+}
 
 /* ---------------- Search bar (floating bottom) ---------------- */
 .search-bar {
