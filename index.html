@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>2026 GLOBAL RPM DAY 좌석배치도</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- GNB -->
+  <header class="gnb">
+    <h1 class="gnb__title" id="appTitle">2026 GLOBAL RPM DAY 좌석배치도</h1>
+    <div class="lang-select" id="langSelect">
+      <button class="lang-select__btn" id="langBtn" aria-haspopup="listbox" aria-expanded="false">
+        <svg class="lang-select__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M3 12h18M12 3c2.5 2.5 3.8 5.7 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.7-3.8-9S9.5 5.5 12 3z" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <span id="langBtnLabel">한국어</span>
+      </button>
+      <ul class="lang-select__menu" id="langMenu" role="listbox"></ul>
+    </div>
+  </header>
+
+  <!-- 좌석 배치도 뷰포트 (pan/zoom) -->
+  <main class="viewport" id="viewport">
+    <div class="world" id="world"></div>
+  </main>
+
+  <!-- 하단 플로팅 영역: (위→아래) 전체보기/검색결과(조건부) → 언어선택 → 팀위치보기 → 검색창 -->
+  <div class="bottom-area" id="bottomArea">
+
+    <!-- 전체보기 복귀 버튼 -->
+    <button class="overview-btn" id="overviewBtn">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 0-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1 1h-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <span id="overviewBtnLabel">전체보기</span>
+    </button>
+
+    <!-- 검색 결과 패널 -->
+    <section class="results-panel" id="resultsPanel">
+      <div class="results-panel__count" id="resultsCount"></div>
+      <ul class="results-panel__list" id="resultsList"></ul>
+    </section>
+
+    <!-- 언어 선택 (하단 고정 바) -->
+    <div class="bottom-lang" id="bottomLang">
+      <button class="bottom-lang__btn" id="bottomLangBtn" aria-haspopup="listbox" aria-expanded="false">
+        <svg class="bottom-lang__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M3 12h18M12 3c2.5 2.5 3.8 5.7 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.7-3.8-9S9.5 5.5 12 3z" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <span id="bottomLangBtnLabel">한국어</span>
+      </button>
+      <ul class="bottom-lang__menu" id="bottomLangMenu" role="listbox"></ul>
+    </div>
+
+    <!-- 팀 위치 보기 버튼 -->
+    <button class="pill-btn" id="teamViewBtn">
+      <svg class="pill-btn__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 21s7-6.1 7-11.4A7 7 0 0 0 5 9.6C5 14.9 12 21 12 21z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+        <circle cx="12" cy="9.6" r="2.6" stroke="currentColor" stroke-width="1.7"/>
+      </svg>
+      <span class="pill-btn__text">
+        <span class="pill-btn__main" id="teamViewBtnLabel">팀 위치 보기</span>
+        <span class="pill-btn__sub" id="teamViewBtnSub">View Team Location</span>
+      </span>
+    </button>
+
+    <!-- 플로팅 검색창 -->
+    <div class="search-bar">
+      <div class="search-bar__label">
+        <span class="pill-btn__main" id="searchLabelMain">이름 검색</span>
+        <span class="pill-btn__sub" id="searchLabelSub">Search by Name</span>
+      </div>
+      <div class="search-bar__row">
+        <svg class="search-bar__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <input type="text" id="searchInput" class="search-bar__input" placeholder="이름으로 좌석 검색" autocomplete="off">
+        <button class="search-bar__clear" id="searchClear" aria-label="clear">&times;</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 시작 팝업: 팀 위치 보기 / 이름 검색 -->
+  <div class="modal-overlay" id="startModal">
+    <div class="start-modal">
+      <button class="start-modal__btn" id="startTeamBtn">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 21s7-6.1 7-11.4A7 7 0 0 0 5 9.6C5 14.9 12 21 12 21z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+          <circle cx="12" cy="9.6" r="2.6" stroke="currentColor" stroke-width="1.7"/>
+        </svg>
+        <span id="startTeamBtnLabel">팀 위치 보기</span>
+      </button>
+      <button class="start-modal__btn" id="startSearchBtn">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+        <span id="startSearchBtnLabel">이름 검색</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 팀 선택 모달 -->
+  <div class="modal-overlay" id="teamModal">
+    <div class="team-modal">
+      <div class="team-modal__header">
+        <button class="team-modal__back" id="teamModalBack">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="teamModalBackLabel">뒤로</span>
+        </button>
+        <div class="team-modal__title" id="teamModalTitle">팀 선택</div>
+        <div class="team-modal__spacer"></div>
+      </div>
+      <div class="team-modal__grid" id="teamModalGrid"></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
