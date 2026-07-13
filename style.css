@@ -141,7 +141,7 @@ body {
   text-align: center;
   overflow: hidden;
   word-break: keep-all;
-  transition: width .4s ease-in-out, left .4s ease-in-out;
+  transition: width .4s ease-in-out, left .4s ease-in-out, font-size .4s ease-in-out;
 }
 .seat.is-highlight {
   background: var(--highlight);
@@ -481,15 +481,15 @@ body {
 .team-modal__btn {
   aspect-ratio: 1 / 0.82;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 3px;
   text-align: center;
   background: rgba(84,148,251,0.10);
   border: 1px solid rgba(84,148,251,0.3);
   border-radius: 12px;
   color: #fff;
-  font-size: 12.5px;
-  font-weight: 600;
   line-height: 1.25;
   padding: 8px 6px;
   cursor: pointer;
@@ -497,3 +497,5 @@ body {
   word-break: keep-all;
 }
 .team-modal__btn:active { background: rgba(84,148,251,0.22); }
+.team-modal__btn-ko { font-size: 12.5px; font-weight: 600; }
+.team-modal__btn-en { font-size: 10px; font-weight: 500; color: var(--text-dim); }

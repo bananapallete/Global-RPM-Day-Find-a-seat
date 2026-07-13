@@ -127,7 +127,7 @@
         width: box.width + "px",
         height: LAYOUT.seat + "px",
         borderRadius: LAYOUT.radius + "px",
-        fontSize: LAYOUT.fontSize.seat + "px",
+        fontSize: box.fontSize + "px",
         padding: (2 * SCALE_FACTOR) + "px"
       });
       el.textContent = seatDisplayName(seat, currentLang);
@@ -138,13 +138,15 @@
     els.world.appendChild(frag);
   }
 
-  // 영문 모드에서는 이름 줄바꿈을 줄이기 위해 박스를 가로로 살짝 넓히고,
-  // 원래 칸 중심을 유지하도록 좌우 대칭으로 늘린다.
+  // 영문 모드에서는 이름 줄바꿈을 줄이기 위해 박스를 가로로 살짝 넓히고
+  // (원래 칸 중심을 유지하도록 좌우 대칭으로), 폰트도 함께 줄인다.
   function seatBox(seat, lang) {
-    const extra = lang === "en" ? LAYOUT.seatWidenExtraEn : 0;
+    const isEn = lang === "en";
+    const extra = isEn ? LAYOUT.seatWidenExtraEn : 0;
     return {
       left: seat.x - extra / 2,
-      width: LAYOUT.seat + extra
+      width: LAYOUT.seat + extra,
+      fontSize: isEn ? LAYOUT.fontSize.seatEn : LAYOUT.fontSize.seat
     };
   }
 
@@ -156,6 +158,7 @@
       const box = seatBox(seat, currentLang);
       el.style.left = box.left + "px";
       el.style.width = box.width + "px";
+      el.style.fontSize = box.fontSize + "px";
     });
   }
 
@@ -483,7 +486,9 @@
     list.forEach((team) => {
       const btn = document.createElement("button");
       btn.className = "team-modal__btn";
-      btn.textContent = currentLang === "ko" ? team.ko : team.en;
+      btn.innerHTML =
+        `<span class="team-modal__btn-ko">${team.ko}</span>` +
+        `<span class="team-modal__btn-en">${team.en}</span>`;
       btn.addEventListener("click", () => {
         els.teamModal.classList.remove("visible");
         focusTeam(team.seatIds);
