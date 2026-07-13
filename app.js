@@ -560,8 +560,9 @@
     els.langBtnLabel.textContent = t.code;
     els.overviewBtnLabel.textContent = t.overview;
     els.searchInput.placeholder = t.searchPlaceholder;
-    els.startTeamBtnLabel.textContent = t.startTeamBtn;
-    els.startSearchBtnLabel.textContent = t.startSearchBtn;
+    // 시작 팝업 버튼은 국문(메인) + 영문(서브)을 항상 함께 표시하므로 메인은 국문 고정
+    els.startTeamBtnLabel.textContent = I18N.ko.startTeamBtn;
+    els.startSearchBtnLabel.textContent = I18N.ko.startSearchBtn;
     els.teamModalBackLabel.textContent = t.back;
     els.teamModalTitle.textContent = t.teamModalTitle;
     refreshMarkerLabels();

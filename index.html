@@ -53,31 +53,34 @@
       <!-- 버튼은 LANG_ORDER 기준으로 JS가 생성 -->
     </div>
 
-    <!-- 팀 위치 보기 버튼 -->
-    <button class="pill-btn" id="teamViewBtn">
-      <svg class="pill-btn__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 21s7-6.1 7-11.4A7 7 0 0 0 5 9.6C5 14.9 12 21 12 21z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
-        <circle cx="12" cy="9.6" r="2.6" stroke="currentColor" stroke-width="1.7"/>
-      </svg>
-      <span class="pill-btn__text">
-        <span class="pill-btn__main" id="teamViewBtnLabel">팀 위치 보기</span>
-        <span class="pill-btn__sub" id="teamViewBtnSub">View Team Location</span>
-      </span>
-    </button>
-
-    <!-- 플로팅 검색창 -->
-    <div class="search-bar">
-      <div class="search-bar__label">
-        <span class="pill-btn__main" id="searchLabelMain">이름 검색</span>
-        <span class="pill-btn__sub" id="searchLabelSub">Search by Name</span>
-      </div>
-      <div class="search-bar__row">
-        <svg class="search-bar__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/>
-          <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    <!-- 팀 위치 보기 / 이름 검색 (2열 1행) -->
+    <div class="bottom-row">
+      <!-- 팀 위치 보기 버튼 -->
+      <button class="pill-btn" id="teamViewBtn">
+        <svg class="pill-btn__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 21s7-6.1 7-11.4A7 7 0 0 0 5 9.6C5 14.9 12 21 12 21z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+          <circle cx="12" cy="9.6" r="2.6" stroke="currentColor" stroke-width="1.7"/>
         </svg>
-        <input type="text" id="searchInput" class="search-bar__input" placeholder="이름으로 좌석 검색" autocomplete="off">
-        <button class="search-bar__clear" id="searchClear" aria-label="clear">&times;</button>
+        <span class="pill-btn__text">
+          <span class="pill-btn__main" id="teamViewBtnLabel">팀 위치 보기</span>
+          <span class="pill-btn__sub" id="teamViewBtnSub">View Team Location</span>
+        </span>
+      </button>
+
+      <!-- 플로팅 검색창 -->
+      <div class="search-bar">
+        <div class="search-bar__label">
+          <span class="pill-btn__main" id="searchLabelMain">이름 검색</span>
+          <span class="pill-btn__sub" id="searchLabelSub">Search by Name</span>
+        </div>
+        <div class="search-bar__row">
+          <svg class="search-bar__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <input type="text" id="searchInput" class="search-bar__input" placeholder="이름으로 좌석 검색" autocomplete="off">
+          <button class="search-bar__clear" id="searchClear" aria-label="clear">&times;</button>
+        </div>
       </div>
     </div>
 
@@ -91,14 +94,16 @@
           <path d="M12 21s7-6.1 7-11.4A7 7 0 0 0 5 9.6C5 14.9 12 21 12 21z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
           <circle cx="12" cy="9.6" r="2.6" stroke="currentColor" stroke-width="1.7"/>
         </svg>
-        <span id="startTeamBtnLabel">팀 위치 보기</span>
+        <span class="start-modal__btn-main" id="startTeamBtnLabel">팀 위치 보기</span>
+        <span class="start-modal__btn-sub">View Team Location</span>
       </button>
       <button class="start-modal__btn" id="startSearchBtn">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.7"/>
           <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
         </svg>
-        <span id="startSearchBtnLabel">이름 검색</span>
+        <span class="start-modal__btn-main" id="startSearchBtnLabel">이름 검색</span>
+        <span class="start-modal__btn-sub">Search by Name</span>
       </button>
     </div>
   </div>
