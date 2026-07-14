@@ -540,6 +540,11 @@
   }
 
   function setupModals() {
+    // 시작 팝업: 두 버튼 밖 아무 곳이나 누르면 팝업을 닫고 바로 배치도로 진입
+    els.startModal.addEventListener("click", (e) => {
+      if (e.target.closest(".start-modal__btn")) return;
+      els.startModal.classList.remove("visible");
+    });
     els.startTeamBtn.addEventListener("click", () => {
       els.startModal.classList.remove("visible");
       buildTeamGrid();
