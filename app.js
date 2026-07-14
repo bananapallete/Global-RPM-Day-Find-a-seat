@@ -143,7 +143,7 @@
     const extra = isEn ? LAYOUT.seatWidenExtraEn : 0;
     return {
       left: seat.x - extra / 2,
-      width: LAYOUT.seatW + extra,
+      width: seat.w + extra,
       fontSize: isEn ? LAYOUT.fontSize.seatEn : LAYOUT.fontSize.seat
     };
   }
@@ -275,7 +275,7 @@
     if (!seat) return;
     const vp = getViewportSize();
     const targetScale = clamp(1.15, view.minScale, view.maxScale);
-    const cx = seat.x + LAYOUT.seatW / 2;
+    const cx = seat.x + seat.w / 2;
     const cy = seat.y + LAYOUT.seatH / 2;
     const targetTx = vp.w / 2 - cx * targetScale;
     const targetTy = vp.h / 2 - cy * targetScale;
@@ -292,7 +292,7 @@
     if (!seats.length) return;
 
     const minX = Math.min(...seats.map((s) => s.x));
-    const maxX = Math.max(...seats.map((s) => s.x + LAYOUT.seatW));
+    const maxX = Math.max(...seats.map((s) => s.x + s.w));
     const minY = Math.min(...seats.map((s) => s.y));
     const maxY = Math.max(...seats.map((s) => s.y + LAYOUT.seatH));
     const pad = 60;

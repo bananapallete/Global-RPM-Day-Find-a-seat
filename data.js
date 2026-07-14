@@ -9,8 +9,8 @@ const SEATS_RAW = {
   C: ["왕우명","리남성","라강림","곽홍량","양로","성종수","김경환(중)","오림호","신정호","신승윤","임채호","김창범","프라납","하르샤","프라하르샤","시타람","라비","아시시","난딥","아얀","리샤브"],
   D: ["리춘맹","왕안기","강위","장검명","고덕지","육수동","이한규","김재모","송재경","김은영","이지우","오세훈","전장웅","히로세","후지이","시티암","마헤시","니사르그","카부스","디비얀쉬","바탄"],
   E: ["정팅","황립홍","안드레스","대니엘","루세로","소피아","이경찬","최유민","강기훈","홍수정","신상현","강현규","니킬","에드가","보우차","마노즈","싯다르타","자예쉬","팟파신","끼앗싸꾼","투 탕"],
-  F: ["알란","호라시오","한정묘","이준호","박지훈","이근협","이상호","정승식","정선태","CHO","신미영","최원호","김재승","신대석","이현수","권성현","이진솔","홍기성","손준걸","최영호","이범근"],
-  G: ["양현승","최진원","김관홍","이정현","윤장호","이현웅","권태형","서남일","박지훈","라소담","이상윤","김소록","김희진","양상현","진병엽","양재석","윤영웅","임승규","최규완","안계명","안휘빈"],
+  F: ["알란","호라시오","한정묘","이준호","박지훈","이근협","이상호","정승식","정선태","CHO","","신미영","최원호","신대석","이현수","권성현","이진솔","홍기성","손준걸","최영호","이범근"],
+  G: ["양현승","최진원","김관홍","이정현","윤장호","이현웅","권태형","서남일","박지훈","김소록","이상윤","라소담","김희진","양상현","진병엽","양재석","윤영웅","임승규","최규완","안계명","안휘빈"],
   H: ["유현일","이태헌","배일근","채형진","조재은","최용준","김병석","장대성","이현주","정승종","마영준","김호영","최민주","김승준","김승래","신의균","박성수","정민영","박성호","정지영","한현택"],
   I: ["이종훈","조원준","전제석","강소라","김기봉","허정우","이승현","고희중","김대윤","박민호","이진오","임정민","이준희","강재석","김용준","정민교","정승완","오동현","김규보","박하림","박철우"],
   J: ["심후성","박시형","이찬","황정혜","김지원","김상리","정진상","서기홍","정향희","김현덕","안재오","이은경","최은주","이혜연","이대근","유명인","정용근","정대교","이선벽","윤영환","김종성"],
@@ -30,8 +30,8 @@ const SEATS_RAW_EN = {
   C: ["Wang Youming","Li Nanxing","Luo Jianglin","Guo Hongliang","Yang Lu","Sung Jongsu","Kim Kyounghwan(C)","Wu Linhu","Shin Jungho","Shin Seungyun","Lim Chaeho","Edmond Kim","Pranav Vaishampayan","Harsha Tadavarthi","Praharsha Gade","Seetharam Tirupathimuhanthi","Naga Ravi Kiran Anne","Ashishi Loya","Nandeep Gohil","Ayan Srivastava","Rishav Prasad"],
   D: ["Li Chunmeng","Wang Anqi","Jiang Wei","Zhang Jianming","Gao Dezhi","Lu Shuaidong","Lee Hangyu","Kim Jaemo","Song Jaekyung","Kim Eunyeong","Yi Jiwoo","Oh Sehoon","Tian Changxiong","Hirose Eiju","Fujii Yuya","Satyam Jain","Mahesh Surla","Nisarg Shah","Qaboos Thakur","Divyansh Pandey","Vatan Sharma"],
   E: ["Zheng Ting","Huang Lihong","Andres Mauricio Lozano Briceno","Daniel Restrepo","Lucero Rivas","Sofia Pimiento Restrepo","Marshall Lee","Ralf Choi","David Kang","Crystal Hong","Leo Shin","Kyle Kang","Nikhil Batlanki","Edgar De Los Santos","Boucha Oussama","Manoj Kheterpal","Siddartha","Jayesh Darshane","Phatpasin Samprasit","Kiatsakul Khalasai","Nguyễn Từ Thắng"],
-  F: ["Alan Alexis Rivas Acevedo","Horacio De Jesus Nangullasmu Hernandez","Ellie Han","Jason Lee","Louis Park","Axel Lee","Lee Sangho","Jeong Seungsig","Jeong Suntae","CHO","Shin Miyoung","Choi Wonho","Kim Jaeseung","Shin Daeseock","Vito Lee","Sunny Kwon","Lee Jinsol","Eddie Hong","Dennis Son","Choi Youngho","Win Lee"],
-  G: ["Yang Hyunseung","Choi Jinwon","Kim Kwanhong","Lee Junghyun","Yoon Jangho","Lee Hyunwoong","Kwon Taehyung","Seo Namil","Park Jihun","Rha Sodam","Lee Sangyun","Kim Sorok","Kim Heejin","Yang Sanghyun","Jin Byungyup","Yang Jaeseok","Yoon Youngwoong","Lim Seungkyu","Choi Kyuwan","An Kyemyung","Ahn Hwibin"],
+  F: ["Alan Alexis Rivas Acevedo","Horacio De Jesus Nangullasmu Hernandez","Ellie Han","Jason Lee","Louis Park","Axel Lee","Lee Sangho","Jeong Seungsig","Jeong Suntae","CHO","","Shin Miyoung","Choi Wonho","Shin Daeseock","Vito Lee","Sunny Kwon","Lee Jinsol","Eddie Hong","Dennis Son","Choi Youngho","Win Lee"],
+  G: ["Yang Hyunseung","Choi Jinwon","Kim Kwanhong","Lee Junghyun","Yoon Jangho","Lee Hyunwoong","Kwon Taehyung","Seo Namil","Park Jihun","Kim Sorok","Lee Sangyun","Rha Sodam","Kim Heejin","Yang Sanghyun","Jin Byungyup","Yang Jaeseok","Yoon Youngwoong","Lim Seungkyu","Choi Kyuwan","An Kyemyung","Ahn Hwibin"],
   H: ["You Hyunil","Lee Taeheon","Bae Ilgeun","Chae Hyungjin","Cho Jaeeun","Choi Yongjun","Kim Byungseok","Jang Daesung","Lee Hyunju","Jung Seungjong","Ma Youngjun","Kim Hoyeong","Choi Minju","Kim Seungjun","Kim Seungrae","Shin Euigyun","Park Seongsoo","Jeong Minyoung","Park Sungho","Jung Jiyoung","Hahn Hyuntaek"],
   I: ["Lee Jonghun","Cho Wonjun","Jeon Jeseok","Kang Sora","Kim Kibong","Heo Jeongu","Lee Seunghyun","Ko Heejung","Kim Daeyoon","Park Minho","Lee Jinoh","Lim Jeongmin","Lee Junhee","Kang Jaeseok","Kim Yongjoon","Jeong Minkyo","Jeong Seungwan","Oh Donghyun","Kim Gyubo","Park Harim","Park Chulwoo"],
   J: ["Sim Husung","Park Sihyong","Lee Chan","Hwang Junghye","Kim Jiwon","Kim Sangrin","Chung Jinsang","Seo Kihong","Jung Hyanghee","Kim Hyundeok","Ahn Jaeoh","Lee Eunkyung","Choi Eunju","Lee Hyeyeon","Lee Daekeun","Yoo Myungin","Jung Yonggeun","Jung Daegyo","Lee Seonbyeok","Yoon Younghwan","Kim Jongseong"],
@@ -135,7 +135,11 @@ function buildColNumbers(groupSizes, gaps) {
   return { nums, aisleNum };
 }
 
-/* 전체 좌석 목록 생성: [{id, row, col, name, x, y}] */
+/* 병합 좌석: 시작 좌석 id -> 차지하는 칸 수.
+   CHO가 F10-F11 두 칸을 하나의 박스로 사용 (F11 좌석은 생성하지 않음). */
+const SEAT_SPANS = { F10: 2 };
+
+/* 전체 좌석 목록 생성: [{id, row, col, name, x, y, w}] */
 function buildSeats() {
   const seats = [];
   const gaps = [LAYOUT.gapGroup, LAYOUT.gapAisle];
@@ -148,15 +152,21 @@ function buildSeats() {
       const y = block.yStart + rowIdx * (LAYOUT.seatH + LAYOUT.gapSeatY) + aisle;
       const names = SEATS_RAW[rowLetter];
       const namesEn = SEATS_RAW_EN[rowLetter] || [];
+      let skip = 0;
       colXs.forEach((x, colIdx) => {
+        if (skip > 0) { skip--; return; } // 병합 좌석에 흡수된 칸
         const col = colNums[colIdx];
+        const id = `${rowLetter}${col}`;
+        const span = SEAT_SPANS[id] || 1;
+        if (span > 1) skip = span - 1;
+        const w = (colXs[colIdx + span - 1] + LAYOUT.seatW) - x;
         seats.push({
-          id: `${rowLetter}${col}`,
+          id,
           row: rowLetter,
           col,
           name: names[colIdx] || "",
           nameEn: namesEn[colIdx] || "",
-          x, y
+          x, y, w
         });
       });
     });
@@ -249,11 +259,11 @@ const LANG_ORDER = ["ko", "en"];
    전 인원(316명) 소속을 사용자 제공 구글시트(3열: 국문/영문/소속, 2026-07-14 갱신)를
    정본으로 재구성했다. 팀 표시명은 ko(국문)=한국어 라벨, en(영문)=시트의 소속 표기.
    동명이인은 좌석 id(예: "F5")로 특정 좌석만 지정한다:
-     박지훈 F5=북미법인 / G9=SK추진실,  김승준 H15=건축사업팀 / K10=설계개발팀,
+     박지훈 F5=미주법인 / G9=SK추진실,  김승준 H15=건축사업팀 / K10=설계개발팀,
      장재욱 B6=중국법인 / M13=설계개발팀,  윤장호 G5=지반사업팀 / K7=엔솔개발팀,
      김경환 A10(일)=일본법인 / C7(중)=중국법인.
    시트엔 있으나 좌석이 없는 인원(서승우·조원규)은 members에 남겨두되 하이라이트만 안 된다.
-   좌석은 있으나 시트에 소속이 없는 인원: CHO(F10) 1명 — 미배정. */
+   좌석은 있으나 시트에 소속이 없는 인원: CHO(F10-11 병합석) 1명 — 미배정. */
 const TEAMS_RAW = [
   { ko: "ENR TF", en: "ENR TF", members: ["강현규","신상현","이경찬","최유민","서승우","홍수정","에드가","니킬","강기훈"] },
   { ko: "유럽사업팀", en: "Europe BIZ Team", members: ["이현수","권성현","이진솔","마노즈","보우차","양재석","진병엽","양상현","김희진"] },
@@ -269,9 +279,9 @@ const TEAMS_RAW = [
   { ko: "MAX TF", en: "MAX TF", members: ["신대석","심후성","박시형","장훈","박영준","허영욱","김현","김민섭","김정빈","변창언","윤재웅","박찬우","고종혁","김준우","이준서"] },
   { ko: "모티브개발팀", en: "MOTIIV DEV Team", members: ["김용수","도기봉","손영민","조해용","서상준","김지원","김상리","유상진","최승원","신형진"] },
   { ko: "웹서비스개발팀", en: "Web Services DEV Team", members: ["이의현","조도연","신민우","김현규","황정혜","이찬","김건휘","한강섭","김승수"] },
-  { ko: "RPM추진실", en: "RPM Office", members: ["김재승","김제헌","김동현","윤승훈","정미선","김희성","조한정","이지선","손가희","민의진","신정윤","송아리","김동규","김동욱","김민태","조성진","한내경","유온유","황다원"] },
+  { ko: "RPM추진실", en: "RPM Office", members: ["김제헌","김동현","윤승훈","정미선","김희성","조한정","이지선","손가희","민의진","신정윤","송아리","김동규","김동욱","김민태","조성진","한내경","유온유","황다원"] },
   { ko: "러시아법인", en: "Russia Branch", members: ["강올레그","콘스탄틴","예고르","크리스티나","블라디미르","예카테리나","예브게니","안나","옥사나"] },
-  { ko: "북미법인", en: "North America Branch", members: ["이준호","F5","한정묘","이근협","알란","호라시오","소피아","안드레스","대니엘","루세로"] },
+  { ko: "미주법인", en: "Americas Branch", members: ["이준호","F5","한정묘","이근협","알란","호라시오","소피아","안드레스","대니엘","루세로"] },
   { ko: "일본법인", en: "Japan Branch", members: ["신정호","윤성민","김재모","송재경","최동철","전장웅","A10","히로세","신승윤","임채호","김은영","신동우","이한규","오세훈","후지이","이지우"] },
   { ko: "인도법인", en: "India Branch", members: ["라비","아시시","난딥","아얀","리샤브","싯다르타","자예쉬","프라하르샤","시타람","바탄","마헤시","니사르그","카부스","디비얀쉬","시티암"] },
   { ko: "필리핀법인", en: "Philippine Branch", members: ["전상목","최주현","제인","아메드","파울로","리츠","마리츠","막스","다이앤","놀란","라지"] },
