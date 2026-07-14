@@ -64,11 +64,11 @@
     stage.textContent = "STAGE";
     frag.appendChild(stage);
 
-    // 열 헤더 (1-21) - block1/block2 각각 독립적인 헤더 (열 그룹 순서가 달라 x좌표가 다름)
+    // 열 헤더 (1-22) - block1/block2 각각 독립적인 헤더. 통로 번호는 흐리게 표기.
     BLOCK_COL_HEADERS.forEach((header) => {
       header.cols.forEach((c) => {
         const label = document.createElement("div");
-        label.className = "col-label";
+        label.className = "col-label" + (c.aisle ? " col-label--aisle" : "");
         Object.assign(label.style, {
           left: (c.x + LAYOUT.seatW / 2) + "px",
           top: header.y + "px",
@@ -487,38 +487,56 @@
   /* ======================================================================
      4. 시작 팝업 / 팀 위치 보기
      ====================================================================== */
-  function sortedTeams() {
-    const list = TEAMS.slice();
-    if (currentLang === "ko") {
-      list.sort((a, b) => a.ko.localeCompare(b.ko, "ko"));
-    } else {
-      list.sort((a, b) => a.en.localeCompare(b.en, "en"));
-    }
-    return list;
+  // 가나다(영문 모드는 ABC)순 정렬 + 해외법인은 별도 카테고리로 분리
+  function splitSortedTeams() {
+    const isOverseas = (t) => t.ko.endsWith("법인");
+    const sortFn = currentLang === "ko"
+      ? (a, b) => a.ko.localeCompare(b.ko, "ko")
+      : (a, b) => a.en.localeCompare(b.en, "en");
+    return {
+      domestic: TEAMS.filter((t) => !isOverseas(t)).sort(sortFn),
+      overseas: TEAMS.filter(isOverseas).sort(sortFn)
+    };
   }
 
   function buildTeamGrid() {
     els.teamModalGrid.innerHTML = "";
-    const list = sortedTeams();
-    if (!list.length) {
+    const { domestic, overseas } = splitSortedTeams();
+    if (!domestic.length && !overseas.length) {
       const empty = document.createElement("div");
       empty.className = "results-panel__empty";
       empty.textContent = I18N[currentLang].noTeamSeats;
       els.teamModalGrid.appendChild(empty);
       return;
     }
-    list.forEach((team) => {
-      const btn = document.createElement("button");
-      btn.className = "team-modal__btn";
-      btn.innerHTML =
-        `<span class="team-modal__btn-ko">${team.ko}</span>` +
-        `<span class="team-modal__btn-en">${team.en}</span>`;
-      btn.addEventListener("click", () => {
-        els.teamModal.classList.remove("visible");
-        focusTeam(team.seatIds);
+    const t = I18N[currentLang];
+    const appendGroup = (titleText, list) => {
+      if (!list.length) return;
+      const group = document.createElement("div");
+      group.className = "team-modal__group";
+      const title = document.createElement("div");
+      title.className = "team-modal__group-title";
+      title.textContent = titleText;
+      group.appendChild(title);
+      const grid = document.createElement("div");
+      grid.className = "team-modal__group-grid";
+      list.forEach((team) => {
+        const btn = document.createElement("button");
+        btn.className = "team-modal__btn";
+        btn.innerHTML =
+          `<span class="team-modal__btn-ko">${team.ko}</span>` +
+          `<span class="team-modal__btn-en">${team.en}</span>`;
+        btn.addEventListener("click", () => {
+          els.teamModal.classList.remove("visible");
+          focusTeam(team.seatIds);
+        });
+        grid.appendChild(btn);
       });
-      els.teamModalGrid.appendChild(btn);
-    });
+      group.appendChild(grid);
+      els.teamModalGrid.appendChild(group);
+    };
+    appendGroup(t.teamGroupDomestic, domestic);
+    appendGroup(t.teamGroupOverseas, overseas);
   }
 
   function setupModals() {

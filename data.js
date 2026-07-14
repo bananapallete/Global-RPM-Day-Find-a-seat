@@ -118,6 +118,23 @@ function buildColXs(groupSizes, gaps) {
   return xs;
 }
 
+/* 각 열의 "표기 번호"를 계산. 큰 통로(gapAisle)도 하나의 열 번호를 차지한다
+   (통로 자체가 그 번호로 표기되고 이후 좌석은 다음 번호부터).
+   block1(6,6,9): 1-12, [13=통로], 14-22 / block2(6,9,6): 1-15, [16=통로], 17-22.
+   이렇게 하면 두 블록에서 같은 번호가 (거의) 같은 x좌표를 가리켜 위아래가 일치한다. */
+function buildColNumbers(groupSizes, gaps) {
+  const nums = [];
+  let n = 1;
+  let aisleNum = null;
+  for (let g = 0; g < groupSizes.length; g++) {
+    for (let c = 0; c < groupSizes[g]; c++) nums.push(n++);
+    if (g < groupSizes.length - 1 && gaps[g] === LAYOUT.gapAisle) {
+      aisleNum = n++; // 통로가 차지하는 열 번호
+    }
+  }
+  return { nums, aisleNum };
+}
+
 /* 전체 좌석 목록 생성: [{id, row, col, name, x, y}] */
 function buildSeats() {
   const seats = [];
@@ -125,13 +142,14 @@ function buildSeats() {
 
   [LAYOUT.block1, LAYOUT.block2].forEach((block) => {
     const colXs = buildColXs(block.colGroups, gaps);
+    const colNums = buildColNumbers(block.colGroups, gaps).nums;
     block.rows.forEach((rowLetter, rowIdx) => {
       const aisle = (block.aisleAfter !== undefined && rowIdx > block.aisleAfter) ? LAYOUT.rowAisle : 0;
       const y = block.yStart + rowIdx * (LAYOUT.seatH + LAYOUT.gapSeatY) + aisle;
       const names = SEATS_RAW[rowLetter];
       const namesEn = SEATS_RAW_EN[rowLetter] || [];
       colXs.forEach((x, colIdx) => {
-        const col = colIdx + 1;
+        const col = colNums[colIdx];
         seats.push({
           id: `${rowLetter}${col}`,
           row: rowLetter,
@@ -168,16 +186,23 @@ function buildRowLabels() {
 }
 const ROW_LABELS = buildRowLabels();
 
-/* 열 헤더(1-21) - block1과 block2는 실제 열 그룹 순서가 달라서(6,6,9 vs 6,9,6)
-   좌석 자체의 x좌표는 서로 다르지만, 헷갈리지 않도록 헤더에 표시되는 숫자
-   1~21의 위치는 맨 위(block1) 기준 x좌표로 두 블록 모두 통일한다. */
+/* 열 헤더(1-22) - 블록마다 실제 좌석 x좌표 위에 자기 열 번호를 표기한다.
+   큰 통로도 열 번호 하나(블록1=13, 블록2=16)를 차지하며, 그 번호는 통로
+   중앙에 흐리게 표기한다. 이 번호 체계에서는 두 블록의 오른쪽 그룹(17-22 등)이
+   같은 번호 = 같은 x좌표로 위아래가 일치한다. */
 const HEADER_OFFSET_Y = LAYOUT.block1.yStart - LAYOUT.colHeaderY; // 37
-const HEADER_XS = buildColXs(LAYOUT.block1.colGroups, [LAYOUT.gapGroup, LAYOUT.gapAisle]);
 const BLOCK_COL_HEADERS = [LAYOUT.block1, LAYOUT.block2].map((block) => {
-  return {
-    y: block.yStart - HEADER_OFFSET_Y,
-    cols: HEADER_XS.map((x, i) => ({ x, label: String(i + 1) }))
-  };
+  const gaps = [LAYOUT.gapGroup, LAYOUT.gapAisle];
+  const xs = buildColXs(block.colGroups, gaps);
+  const { nums, aisleNum } = buildColNumbers(block.colGroups, gaps);
+  const cols = xs.map((x, i) => ({ x, label: String(nums[i]) }));
+  if (aisleNum !== null) {
+    // 통로 직전 좌석의 오른쪽 끝 + 통로 절반 = 통로 중앙
+    const lastIdx = nums.indexOf(aisleNum - 1);
+    const aisleCenter = xs[lastIdx] + LAYOUT.seatW + LAYOUT.gapAisle / 2;
+    cols.push({ x: aisleCenter - LAYOUT.seatW / 2, label: String(aisleNum), aisle: true });
+  }
+  return { y: block.yStart - HEADER_OFFSET_Y, cols };
 });
 
 /* ---- 다국어(i18n) 문자열 ---- */
@@ -195,7 +220,9 @@ const I18N = {
     startSearchBtn: "이름 검색",
     teamModalTitle: "팀 선택",
     back: "뒤로",
-    noTeamSeats: "표시할 좌석 정보가 없습니다"
+    noTeamSeats: "표시할 좌석 정보가 없습니다",
+    teamGroupDomestic: "실 · 팀 · TF",
+    teamGroupOverseas: "해외법인"
   },
   en: {
     code: "EN", name: "English",
@@ -210,7 +237,9 @@ const I18N = {
     startSearchBtn: "Search by Name",
     teamModalTitle: "Select Team",
     back: "Back",
-    noTeamSeats: "No seat data available"
+    noTeamSeats: "No seat data available",
+    teamGroupDomestic: "HQ Teams",
+    teamGroupOverseas: "Overseas Branches"
   },
 };
 
@@ -220,7 +249,7 @@ const LANG_ORDER = ["ko", "en"];
    전 인원(316명) 소속을 사용자 제공 구글시트(3열: 국문/영문/소속, 2026-07-14 갱신)를
    정본으로 재구성했다. 팀 표시명은 ko(국문)=한국어 라벨, en(영문)=시트의 소속 표기.
    동명이인은 좌석 id(예: "F5")로 특정 좌석만 지정한다:
-     박지훈 F5=북미법인 / G9=SK추진실,  김승준 H14=건축사업팀 / K10=설계개발팀,
+     박지훈 F5=북미법인 / G9=SK추진실,  김승준 H15=건축사업팀 / K10=설계개발팀,
      장재욱 B6=중국법인 / M13=설계개발팀,  윤장호 G5=지반사업팀 / K7=엔솔개발팀,
      김경환 A10(일)=일본법인 / C7(중)=중국법인.
    시트엔 있으나 좌석이 없는 인원(서승우·조원규)은 members에 남겨두되 하이라이트만 안 된다.
@@ -233,7 +262,7 @@ const TEAMS_RAW = [
   { ko: "기계사업팀", en: "Mechanical BIZ Team", members: ["윤영환","김종성","신상준","한수민","이환규","박이준","심은기","최승빈","박상우"] },
   { ko: "지반사업팀", en: "Geotechnical BIZ Team", members: ["강소라","전제석","조원준","최용준","이종훈","조재은","배일근","채형진","유현일","이태헌","양현승","최진원","김관홍","이정현","G5","이현웅"] },
   { ko: "구조사업팀", en: "Structural BIZ Team", members: ["정대교","이정우","전준언","김효진","강희용","이선벽","조원규","배동민","임정현","김민재","박예림"] },
-  { ko: "건축사업팀", en: "Architecture BIZ Team", members: ["신의균","강재석","이준희","정민교","이환주","김용준","최민주","H14","김승래"] },
+  { ko: "건축사업팀", en: "Architecture BIZ Team", members: ["신의균","강재석","이준희","정민교","이환주","김용준","최민주","H15","김승래"] },
   { ko: "설계개발팀", en: "Design DEV Team", members: ["김현덕","이은경","안재오","K10","이시암","최배성","안태준","이승훈","홍정모","김종남","배상현","김준호","박찬석","문성혁","류지승","소정은","M13"] },
   { ko: "엔솔개발팀", en: "EnSol DEV Team", members: ["박현재","정진상","허문석","우성운","함성훈","서기홍","K7","권정우","장형상","정향희","박경식","강승한","박건태","장창현","상예찬","이수민","서충원"] },
   { ko: "기술기획팀", en: "Technical Planning Team", members: ["이혜연","이대근","김동진","김선우","김태국","박상렬","하성열","이승진","이현민","박재욱","최은주"] },

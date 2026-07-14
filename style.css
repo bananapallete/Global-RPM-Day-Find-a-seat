@@ -172,6 +172,8 @@ body {
 }
 .row-label { transform: translateY(-50%); }
 .col-label { transform: translateX(-50%); }
+/* 통로가 차지하는 열 번호는 흐리게 표기 */
+.col-label--aisle { opacity: 0.45; font-weight: 400; }
 .marker {
   position: absolute;
   border-radius: 4px;
@@ -490,11 +492,25 @@ body {
 .team-modal__title { font-size: 15px; font-weight: 700; }
 .team-modal__spacer { width: 40px; }
 .team-modal__grid {
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.team-modal__group-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+  padding: 0 2px 8px;
+  border-bottom: 1px solid rgba(94,130,220,0.18);
+  margin-bottom: 10px;
+}
+.team-modal__group-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  padding: 16px;
-  overflow-y: auto;
 }
 .team-modal__btn {
   min-height: 60px;
