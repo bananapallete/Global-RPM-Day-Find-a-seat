@@ -52,15 +52,18 @@ body {
   z-index: 40;
   position: relative;
 }
+/* 타이틀 + 크레딧 2줄 배치. GNB 높이(52px 고정)는 그대로 두고 그 안에서만 정렬 */
 .gnb__title-wrap {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
   min-width: 0;
   padding-right: 8px;
 }
 .gnb__title {
   font-size: 14px;
+  line-height: 1.2;
   font-weight: 700;
   margin: 0;
   white-space: nowrap;
@@ -68,8 +71,8 @@ body {
   text-overflow: ellipsis;
 }
 .gnb__credit {
-  flex: 0 0 auto;
   font-size: 9px;
+  line-height: 1;
   font-weight: 400;
   color: var(--text-dim);
   opacity: 0.7;
