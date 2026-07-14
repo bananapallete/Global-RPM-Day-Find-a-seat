@@ -12,13 +12,13 @@ const SEATS_RAW = {
   F: ["알란","호라시오","한정묘","이준호","박지훈","이근협","이상호","정승식","정선태","CHO","","신미영","최원호","신대석","이현수","권성현","이진솔","홍기성","손준걸","최영호","이범근"],
   G: ["양현승","최진원","김관홍","이정현","윤장호","이현웅","권태형","서남일","박지훈","김소록","이상윤","라소담","김희진","양상현","진병엽","양재석","윤영웅","임승규","최규완","안계명","안휘빈"],
   H: ["유현일","이태헌","배일근","채형진","조재은","최용준","김병석","장대성","이현주","정승종","마영준","김호영","최민주","김승준","김승래","신의균","박성수","정민영","박성호","정지영","한현택"],
-  I: ["이종훈","조원준","전제석","강소라","김기봉","허정우","이승현","고희중","김대윤","박민호","이진오","임정민","이준희","강재석","김용준","정민교","정승완","오동현","김규보","박하림","박철우"],
+  I: ["이종훈","조원준","전제석","강소라","김기봉","허정우","이승현","윤승훈","신정윤","박민호","이진오","임정민","이준희","강재석","김용준","정민교","정승완","오동현","김규보","박하림","박철우"],
   J: ["심후성","박시형","이찬","황정혜","김지원","김상리","정진상","서기홍","정향희","김현덕","안재오","이은경","최은주","이혜연","이대근","유명인","정용근","정대교","이선벽","윤영환","김종성"],
   K: ["박찬우","장훈","조도연","이의현","유상진","최승원","윤장호","박건태","장형상","김승준","이시암","최배성","홍정모","김선우","박상렬","이승민","김세훈","김민재","박예림","한수민","신상준"],
   L: ["변창언","김민섭","김건휘","한강섭","김용수","신형진","권정우","박경식","강승한","안태준","김준호","배상현","김종남","김동진","김태국","박준혁","하성우","배동민","임정현","박이준","이환규"],
   M: ["박영준","허영욱","신민우","김승수","손영민","서상준","박현재","장창현","상예찬","이수민","류지승","소정은","장재욱","이승진","이현민","박동근","황병훈","강희용","김효진","심은기","최승빈"],
   N: ["고종혁","김준우","윤재웅","김현규","도기봉","조해용","허문석","우성운","함성훈","서충원","이승훈","박찬석","문성혁","박재욱","하성열","김성진","양소희","이정우","전준언","박상우","유온유"],
-  O: ["이준서","김정빈","김현","이환주","김희성","김민태","조성진","김동욱","김동규","신정윤","손가희","이지선","정미선","윤승훈","김제헌","민의진","송아리","김동현","조한정","한내경","황다원"]
+  O: ["이준서","김정빈","김현","이환주","김희성","김민태","조성진","김동욱","김동규","","손가희","이지선","정미선","","김제헌","민의진","송아리","김동현","조한정","한내경","황다원"]
 };
 
 const ROW_LETTERS = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O"];
@@ -33,13 +33,13 @@ const SEATS_RAW_EN = {
   F: ["Alan Alexis Rivas Acevedo","Horacio De Jesus Nangullasmu Hernandez","Ellie Han","Jason Lee","Louis Park","Axel Lee","Lee Sangho","Jeong Seungsig","Jeong Suntae","CHO","","Shin Miyoung","Choi Wonho","Shin Daeseock","Vito Lee","Sunny Kwon","Lee Jinsol","Eddie Hong","Dennis Son","Choi Youngho","Win Lee"],
   G: ["Yang Hyunseung","Choi Jinwon","Kim Kwanhong","Lee Junghyun","Yoon Jangho","Lee Hyunwoong","Kwon Taehyung","Seo Namil","Park Jihun","Kim Sorok","Lee Sangyun","Rha Sodam","Kim Heejin","Yang Sanghyun","Jin Byungyup","Yang Jaeseok","Yoon Youngwoong","Lim Seungkyu","Choi Kyuwan","An Kyemyung","Ahn Hwibin"],
   H: ["You Hyunil","Lee Taeheon","Bae Ilgeun","Chae Hyungjin","Cho Jaeeun","Choi Yongjun","Kim Byungseok","Jang Daesung","Lee Hyunju","Jung Seungjong","Ma Youngjun","Kim Hoyeong","Choi Minju","Kim Seungjun","Kim Seungrae","Shin Euigyun","Park Seongsoo","Jeong Minyoung","Park Sungho","Jung Jiyoung","Hahn Hyuntaek"],
-  I: ["Lee Jonghun","Cho Wonjun","Jeon Jeseok","Kang Sora","Kim Kibong","Heo Jeongu","Lee Seunghyun","Ko Heejung","Kim Daeyoon","Park Minho","Lee Jinoh","Lim Jeongmin","Lee Junhee","Kang Jaeseok","Kim Yongjoon","Jeong Minkyo","Jeong Seungwan","Oh Donghyun","Kim Gyubo","Park Harim","Park Chulwoo"],
+  I: ["Lee Jonghun","Cho Wonjun","Jeon Jeseok","Kang Sora","Kim Kibong","Heo Jeongu","Lee Seunghyun","Yoon Seunghoon","Shin Jeongyoon","Park Minho","Lee Jinoh","Lim Jeongmin","Lee Junhee","Kang Jaeseok","Kim Yongjoon","Jeong Minkyo","Jeong Seungwan","Oh Donghyun","Kim Gyubo","Park Harim","Park Chulwoo"],
   J: ["Sim Husung","Park Sihyong","Lee Chan","Hwang Junghye","Kim Jiwon","Kim Sangrin","Chung Jinsang","Seo Kihong","Jung Hyanghee","Kim Hyundeok","Ahn Jaeoh","Lee Eunkyung","Choi Eunju","Lee Hyeyeon","Lee Daekeun","Yoo Myungin","Jung Yonggeun","Jung Daegyo","Lee Seonbyeok","Yoon Younghwan","Kim Jongseong"],
   K: ["Park Chanwoo","Jang Hun","Cho Doyeon","Lee Uihyun","You Sangjin","Choi Seungwon","Yun Jangho","Park Kuntae","Jang Hyungsang","Kim Seungjun","Lee Siam","Choi Baisung","Hong Jeongmo","Kim Sunwoo","Park Sangryul","Lee Seungmin","Kim Sehoon","Kim Minjae","Park Yerim","Han Sumin","Shin Sangjun"],
   L: ["Byun Changeon","Kim Minseop","Kim Geonhwi","Han Kangsub","Kim Yongsu","Shin Hyeongjin","Kwon Jeongwoo","Park Kyungsik","Kang Seunghan","Ahn Taejun","Kim Junho","Bae Sanghyun","Kim Jongnam","Kim Dongjin","Kim Taegook","Park Junhyuk","Ha Sungwoo","Lee Jungwoo","Jeon Juneon","Park Yijun","Lee Hwangyu"],
   M: ["Park Youngjun","Hur Youngwook","Shin Minwoo","Kim Seungsu","Son Youngmin","Seo Sangjun","Park Hyunjae","Jang Changhyun","Sang Yechan","Lee Sumin","Ryu Jeeseung","So Jeongeun","Jang Jaeuk","Lee Seungjin","Lee Hyunmin","Park Donggeun","Hwang Byunghun","Kang Heeyong","Kim Hyojin","Sim Eungi","Choi Seungbin"],
   N: ["Ko Jonghyuk","Kim Joonwoo","Yun Jaewoong","Kim Hyeongyu","Do Kibong","Cho Haeyong","Huh Moonseok","Woo Sungwoon","Ham Sunghun","Seo Chungwon","Lee Seunghoon","Park Chanseok","Moon Seonghyeok","Park Jaewook","Ha Sungyoul","Kim Sungjin","Yang Sohee","Bae Dongmin","Lim Jeonghyeon","Park Sangwoo","Yoo Onyoo"],
-  O: ["Lee Junseo","Kim Jungbin","Kim Hyun","Lee Hwanju","Kim Heesung","Kim Mintae","Jo Sungjin","Kim Dongwook","Kim Dongkyu","Shin Jeongyoon","Sohn Gahee","Lee Jisun","Jung Misun","Yoon Seunghoon","Kim Jeheon","Min Uijin","Song Ari","Kim Donghyun","Cho Hanjung","Han Naekyung","Hwang Dawon"]
+  O: ["Lee Junseo","Kim Jungbin","Kim Hyun","Lee Hwanju","Kim Heesung","Kim Mintae","Jo Sungjin","Kim Dongwook","Kim Dongkyu","","Sohn Gahee","Lee Jisun","Jung Misun","","Kim Jeheon","Min Uijin","Song Ari","Kim Donghyun","Cho Hanjung","Han Naekyung","Hwang Dawon"]
 };
 
 /* 확대(pinch-zoom) 시 CSS transform이 저해상도 래스터를 그대로 늘려서 텍스트가
